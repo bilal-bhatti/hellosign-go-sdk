@@ -86,9 +86,6 @@ func TestCreateEmbeddedSignatureRequestWithTemplate(t *testing.T) {
 
 	res, err := client.CreateEmbeddedSignatureRequestWithTemplate(request)
 
-	if err != nil {
-		log.Println("Error", err)
-	}
 	assert.NotNil(t, res, "Should return response")
 	assert.Nil(t, err, "Should not return error")
 
