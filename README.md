@@ -10,7 +10,7 @@ https://app.hellosign.com/api/reference
 ## Installation
 
 ```go
-go get github.com/jheth/hellosign-go-sdk
+go get github.com/bilal-bhatti/hellosign-go-sdk
 ```
 ## Usage
 
