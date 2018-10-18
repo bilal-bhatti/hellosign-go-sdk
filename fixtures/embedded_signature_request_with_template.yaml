@@ -14,7 +14,7 @@ interactions:
     form: {}
     headers:
       Authorization:
-      - Basic OGIxYzhkZDU0MDY3ZTViOWZmZTQ2MGEzOWU4Yzk5ZjVmN2NkYWUyMmI1MWY4ZWViMzg4NTdhNDBhNWRhYjEwNzo=
+      - Basic YTA1NjU0YjMjQ5ZWVmOWNlMTY2MTRmNmQ2Nzo=
       Content-Type:
       - multipart/form-data; boundary=e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639
     url: https://api.hellosign.com/v3/signature_request/create_embedded_with_template
