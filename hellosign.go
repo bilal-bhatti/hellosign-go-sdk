@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -195,7 +194,6 @@ func (m *Client) CreateEmbeddedSignatureRequestWithTemplate(
 		return nil, err
 	}
 
-	log.Println("params", params)
 	response, err := m.post("signature_request/create_embedded_with_template", params, *writer)
 	if err != nil {
 		return nil, err
