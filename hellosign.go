@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -55,6 +56,7 @@ type EmbeddedRequestWithTemplate struct {
 	Subject      string            `form_field:"subject"`
 	Message      string            `form_field:"message"`
 	Signers      []Signer          `form_field:"signers"`
+	CustomFields []CustomField     `form_field:"custom_fields"`
 	Metadata     map[string]string `form_field:"metadata"`
 }
 
@@ -105,7 +107,6 @@ type SignatureRequest struct {
 
 type CustomField struct {
 	Name     string `json:"name"`     // The name of the Custom Field.
-	Type     string `json:"type"`     // The type of this Custom Field. Only 'text' and 'checkbox' are currently supported.
 	Value    string `json:"value"`    // A text string for text fields or true/false for checkbox fields
 	Required bool   `json:"required"` // A boolean value denoting if this field is required.
 	Editor   string `json:"editor"`   // The name of the Role that is able to edit this field.
@@ -194,6 +195,7 @@ func (m *Client) CreateEmbeddedSignatureRequestWithTemplate(
 		return nil, err
 	}
 
+	log.Println("params", params)
 	response, err := m.post("signature_request/create_embedded_with_template", params, *writer)
 	if err != nil {
 		return nil, err
@@ -523,6 +525,15 @@ func (m *Client) marshalMultipartEmbeddedRequestWithTemplate(
 						pin.Write([]byte(signer.Pin))
 					}
 				}
+			case "custom_fields":
+				cfields, err := w.CreateFormField("custom_fields")
+				if err != nil {
+					return nil, nil, err
+				}
+
+				bites, err := json.Marshal(embRequest.CustomFields)
+
+				cfields.Write(bites)
 			case "file":
 				for i, path := range embRequest.File {
 					file, _ := os.Open(path)

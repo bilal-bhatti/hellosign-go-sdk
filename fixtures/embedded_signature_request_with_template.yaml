@@ -2,27 +2,28 @@
 version: 1
 interactions:
 - request:
-    body: "--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"test_mode\"\r\n\r\n1\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"allow_decline\"\r\n\r\n0\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"client_id\"\r\n\r\n6b2d43473fdf7096960ce5bf0230fb80\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"template_id\"\r\n\r\n8a1190ab4afc1808d045660d3cd4a6dcc68bdebd\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"subject\"\r\n\r\nOur Agreement\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"message\"\r\n\r\nLet's do this!\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"signers[Investor][email_address]\"\r\n\r\njane@example.com\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639\r\nContent-Disposition:
-      form-data; name=\"signers[Investor][name]\"\r\n\r\nJane Doe\r\n--e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639--\r\n"
+    body: "--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"test_mode\"\r\n\r\n1\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"allow_decline\"\r\n\r\n0\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"client_id\"\r\n\r\n6b2d43473fdf7096960ce5bf0230fb80\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"template_id\"\r\n\r\n8a1190ab4afc1808d045660d3cd4a6dcc68bdebd\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"subject\"\r\n\r\nOur Agreement\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"message\"\r\n\r\nLet's do this!\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"signers[Investor][email_address]\"\r\n\r\njane@example.com\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"signers[Investor][name]\"\r\n\r\nJane Doe\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f\r\nContent-Disposition:
+      form-data; name=\"custom_fields\"\r\n\r\n[{\"name\":\"SSN\",\"value\":\"123-45-6789\",\"required\":false,\"editor\":\"Investor\"}]\r\n--04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f--\r\n"
     form: {}
     headers:
       Authorization:
       - Basic YTA1NjU0YjMjQ5ZWVmOWNlMTY2MTRmNmQ2Nzo=
       Content-Type:
-      - multipart/form-data; boundary=e117825bb0ec828cc53984797e19e031c9d2b388534dfd534e8955bbf639
+      - multipart/form-data; boundary=04456f1110dba0ee991f4b0963aa03ae50a9c9959d5237e46c8134130b8f
     url: https://api.hellosign.com/v3/signature_request/create_embedded_with_template
     method: POST
   response:
-    body: '{"signature_request":{"signature_request_id":"00e2d66de497314ecbb229a5a873edfd58d05004","test_mode":true,"title":"Our
+    body: '{"signature_request":{"signature_request_id":"67789aaa86066e88972a27bf32158abf4f9a2c51","test_mode":true,"title":"Our
       Agreement","original_title":"Our Agreement","subject":"Our Agreement","message":"Let''s
-      do this!","metadata":{},"is_complete":false,"is_declined":false,"has_error":false,"custom_fields":[],"response_data":[],"signing_url":null,"signing_redirect_url":null,"final_copy_uri":"\/v3\/signature_request\/final_copy\/00e2d66de497314ecbb229a5a873edfd58d05004","files_url":"https:\/\/api.hellosign.com\/v3\/signature_request\/files\/00e2d66de497314ecbb229a5a873edfd58d05004","details_url":"https:\/\/app.hellosign.com\/home\/manage?guid=00e2d66de497314ecbb229a5a873edfd58d05004","requester_email_address":"tom@cove.io","signatures":[{"signature_id":"79134789fb2648f0d65557ab3f032b19","has_pin":false,"signer_email_address":"jane@example.com","signer_name":"Jane
+      do this!","metadata":{},"is_complete":false,"is_declined":false,"has_error":false,"custom_fields":[{"name":"SSN","type":"text","required":false,"api_id":"abab07_9","editor":null,"value":null}],"response_data":[],"signing_url":null,"signing_redirect_url":null,"final_copy_uri":"\/v3\/signature_request\/final_copy\/67789aaa86066e88972a27bf32158abf4f9a2c51","files_url":"https:\/\/api.hellosign.com\/v3\/signature_request\/files\/67789aaa86066e88972a27bf32158abf4f9a2c51","details_url":"https:\/\/app.hellosign.com\/home\/manage?guid=67789aaa86066e88972a27bf32158abf4f9a2c51","requester_email_address":"some@example.com","signatures":[{"signature_id":"5fc7781d67d8488a9098d698bb9e9de9","has_pin":false,"signer_email_address":"jane@example.com","signer_name":"Jane
       Doe","order":null,"status_code":"awaiting_signature","signed_at":null,"last_viewed_at":null,"last_reminded_at":null,"error":null}],"cc_email_addresses":[]}}'
     headers:
       Access-Control-Allow-Headers:
@@ -36,7 +37,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 18 Oct 2018 03:38:05 GMT
+      - Thu, 18 Oct 2018 05:07:54 GMT
       P3p:
       - CP="NOP3PPOLICY"
       Server:
@@ -50,9 +51,9 @@ interactions:
       X-Ratelimit-Limit:
       - "50"
       X-Ratelimit-Limit-Remaining:
-      - "49"
+      - "47"
       X-Ratelimit-Reset:
-      - "1539833885"
+      - "1539839274"
     status: 200 OK
     code: 200
     duration: ""

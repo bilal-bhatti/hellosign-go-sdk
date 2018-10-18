@@ -69,6 +69,9 @@ func TestCreateEmbeddedSignatureRequestWithTemplate(t *testing.T) {
 
 	client := createVcrClient(vcr)
 
+	cfields := []CustomField{}
+	cfields = append(cfields, CustomField{Name: "SSN", Value: "123-45-6789", Editor: "Investor"})
+
 	request := EmbeddedRequestWithTemplate{
 		TestMode:   true,
 		ClientID:   os.Getenv("HELLOSIGN_CLIENT_ID"),
@@ -82,6 +85,7 @@ func TestCreateEmbeddedSignatureRequestWithTemplate(t *testing.T) {
 				Name:  "Jane Doe",
 			},
 		},
+		CustomFields: cfields,
 	}
 
 	res, err := client.CreateEmbeddedSignatureRequestWithTemplate(request)
@@ -89,7 +93,7 @@ func TestCreateEmbeddedSignatureRequestWithTemplate(t *testing.T) {
 	assert.NotNil(t, res, "Should return response")
 	assert.Nil(t, err, "Should not return error")
 
-	assert.Equal(t, "00e2d66de497314ecbb229a5a873edfd58d05004", res.SignatureRequestID)
+	assert.Equal(t, "67789aaa86066e88972a27bf32158abf4f9a2c51", res.SignatureRequestID)
 	assert.Equal(t, "Our Agreement", res.Subject)
 	assert.Equal(t, true, res.TestMode)
 	assert.Equal(t, false, res.IsComplete)
