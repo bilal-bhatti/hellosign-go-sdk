@@ -62,6 +62,43 @@ func TestCreateEmbeddedSignatureRequestFileURL(t *testing.T) {
 	assert.Equal(t, false, res.IsDeclined)
 }
 
+func TestCreateEmbeddedSignatureRequestWithTemplate(t *testing.T) {
+	// Start our recorder
+	vcr := fixture("fixtures/embedded_signature_request_with_template")
+	defer vcr.Stop() // Make sure recorder is stopped once done with it
+
+	client := createVcrClient(vcr)
+
+	request := EmbeddedRequestWithTemplate{
+		TestMode:   true,
+		ClientID:   os.Getenv("HELLOSIGN_CLIENT_ID"),
+		TemplateID: "8a1190ab4afc1808d045660d3cd4a6dcc68bdebd",
+		Subject:    "Our Agreement",
+		Message:    "Let's do this!",
+		Signers: []Signer{
+			Signer{
+				Role:  "Investor",
+				Email: "jane@example.com",
+				Name:  "Jane Doe",
+			},
+		},
+	}
+
+	res, err := client.CreateEmbeddedSignatureRequestWithTemplate(request)
+
+	if err != nil {
+		log.Println("Error", err)
+	}
+	assert.NotNil(t, res, "Should return response")
+	assert.Nil(t, err, "Should not return error")
+
+	assert.Equal(t, "00e2d66de497314ecbb229a5a873edfd58d05004", res.SignatureRequestID)
+	assert.Equal(t, "Our Agreement", res.Subject)
+	assert.Equal(t, true, res.TestMode)
+	assert.Equal(t, false, res.IsComplete)
+	assert.Equal(t, false, res.IsDeclined)
+}
+
 func TestGetSignatureRequest(t *testing.T) {
 	vcr := fixture("fixtures/get_signature_request")
 	defer vcr.Stop() // Make sure recorder is stopped once done with it

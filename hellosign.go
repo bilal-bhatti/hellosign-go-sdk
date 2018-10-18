@@ -43,7 +43,23 @@ type EmbeddedRequest struct {
 	FormFieldsPerDocument [][]DocumentFormField `form_field:"form_fields_per_document"`
 }
 
+// EmbeddedRequest contains the request parameters for create_embedded
+type EmbeddedRequestWithTemplate struct {
+	TestMode     bool              `form_field:"test_mode"`
+	AllowDecline bool              `form_field:"allow_decline"`
+	ClientID     string            `form_field:"client_id"`
+	FileURL      []string          `form_field:"file_url"`
+	File         []string          `form_field:"file"`
+	TemplateID   string            `form_field:"template_id"`
+	Title        string            `form_field:"title"`
+	Subject      string            `form_field:"subject"`
+	Message      string            `form_field:"message"`
+	Signers      []Signer          `form_field:"signers"`
+	Metadata     map[string]string `form_field:"metadata"`
+}
+
 type Signer struct {
+	Role  string `field:"-"`
 	Name  string `field:"name"`
 	Email string `field:"email"`
 	Order int    `field:"order"`
@@ -162,6 +178,23 @@ func (m *Client) CreateEmbeddedSignatureRequest(
 	}
 
 	response, err := m.post("signature_request/create_embedded", params, *writer)
+	if err != nil {
+		return nil, err
+	}
+
+	return m.sendSignatureRequest(response)
+}
+
+// CreateEmbeddedSignatureRequestWithTemplate creates a new embedded signature with template
+func (m *Client) CreateEmbeddedSignatureRequestWithTemplate(
+	embeddedRequest EmbeddedRequestWithTemplate) (*SignatureRequest, error) {
+
+	params, writer, err := m.marshalMultipartEmbeddedRequestWithTemplate(embeddedRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := m.post("signature_request/create_embedded_with_template", params, *writer)
 	if err != nil {
 		return nil, err
 	}
@@ -391,6 +424,104 @@ func (m *Client) marshalMultipartRequest(
 						return nil, nil, err
 					}
 					formField.Write([]byte(ffpdJSON))
+				}
+			case "file":
+				for i, path := range embRequest.File {
+					file, _ := os.Open(path)
+
+					formField, err := w.CreateFormFile(fmt.Sprintf("file[%v]", i), file.Name())
+					if err != nil {
+						return nil, nil, err
+					}
+					_, err = io.Copy(formField, file)
+				}
+			case "file_url":
+				for i, fileURL := range embRequest.FileURL {
+					formField, err := w.CreateFormField(fmt.Sprintf("file_url[%v]", i))
+					if err != nil {
+						return nil, nil, err
+					}
+					formField.Write([]byte(fileURL))
+				}
+			}
+		case reflect.Bool:
+			formField, err := w.CreateFormField(fieldTag)
+			if err != nil {
+				return nil, nil, err
+			}
+			formField.Write([]byte(m.boolToIntString(val.Bool())))
+		default:
+			if val.String() != "" {
+				formField, err := w.CreateFormField(fieldTag)
+				if err != nil {
+					return nil, nil, err
+				}
+				formField.Write([]byte(val.String()))
+			}
+		}
+	}
+
+	w.Close()
+	return &b, w, nil
+}
+
+func (m *Client) marshalMultipartEmbeddedRequestWithTemplate(
+	embRequest EmbeddedRequestWithTemplate) (*bytes.Buffer, *multipart.Writer, error) {
+
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+
+	structType := reflect.TypeOf(embRequest)
+	val := reflect.ValueOf(embRequest)
+
+	for i := 0; i < val.NumField(); i++ {
+
+		valueField := val.Field(i)
+		f := valueField.Interface()
+		val := reflect.ValueOf(f)
+		field := structType.Field(i)
+		fieldTag := field.Tag.Get("form_field")
+
+		switch val.Kind() {
+		case reflect.Map:
+			for k, v := range embRequest.Metadata {
+				formField, err := w.CreateFormField(fmt.Sprintf("metadata[%v]", k))
+				if err != nil {
+					return nil, nil, err
+				}
+				formField.Write([]byte(v))
+			}
+		case reflect.Slice:
+			switch fieldTag {
+			case "signers":
+				for _, signer := range embRequest.Signers {
+					email, err := w.CreateFormField(fmt.Sprintf("signers[%v][email_address]", signer.Role))
+					if err != nil {
+						return nil, nil, err
+					}
+					email.Write([]byte(signer.Email))
+
+					name, err := w.CreateFormField(fmt.Sprintf("signers[%v][name]", signer.Role))
+					if err != nil {
+						return nil, nil, err
+					}
+					name.Write([]byte(signer.Name))
+
+					if signer.Order != 0 {
+						order, err := w.CreateFormField(fmt.Sprintf("signers[%v][order]", signer.Role))
+						if err != nil {
+							return nil, nil, err
+						}
+						order.Write([]byte(strconv.Itoa(signer.Order)))
+					}
+
+					if signer.Pin != "" {
+						pin, err := w.CreateFormField(fmt.Sprintf("signers[%v][pin]", signer.Role))
+						if err != nil {
+							return nil, nil, err
+						}
+						pin.Write([]byte(signer.Pin))
+					}
 				}
 			case "file":
 				for i, path := range embRequest.File {
