@@ -106,10 +106,10 @@ type SignatureRequest struct {
 }
 
 type CustomField struct {
-	Name     string `json:"name"`               // The name of the Custom Field.
-	Value    string `json:"value"`              // A text string for text fields or true/false for checkbox fields
-	Required bool   `json:"required,omitempty"` // A boolean value denoting if this field is required.
-	Editor   string `json:"editor,omitempty"`   // The name of the Role that is able to edit this field.
+	Name     string `json:"name"`             // The name of the Custom Field.
+	Value    string `json:"value"`            // A text string for text fields or true/false for checkbox fields
+	Required bool   `json:"required"`         // A boolean value denoting if this field is required.
+	Editor   string `json:"editor,omitempty"` // The name of the Role that is able to edit this field.
 }
 
 type ResponseData struct {
