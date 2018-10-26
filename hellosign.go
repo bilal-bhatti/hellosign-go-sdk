@@ -51,6 +51,7 @@ type EmbeddedRequestWithTemplate struct {
 	FileURL      []string          `form_field:"file_url"`
 	File         []string          `form_field:"file"`
 	TemplateID   string            `form_field:"template_id"`
+	TemplateIDs  []string          `form_field:"template_ids"`
 	Title        string            `form_field:"title"`
 	Subject      string            `form_field:"subject"`
 	Message      string            `form_field:"message"`
@@ -105,10 +106,10 @@ type SignatureRequest struct {
 }
 
 type CustomField struct {
-	Name     string `json:"name"`     // The name of the Custom Field.
-	Value    string `json:"value"`    // A text string for text fields or true/false for checkbox fields
-	Required bool   `json:"required"` // A boolean value denoting if this field is required.
-	Editor   string `json:"editor"`   // The name of the Role that is able to edit this field.
+	Name     string `json:"name"`               // The name of the Custom Field.
+	Value    string `json:"value"`              // A text string for text fields or true/false for checkbox fields
+	Required bool   `json:"required,omitempty"` // A boolean value denoting if this field is required.
+	Editor   string `json:"editor,omitempty"`   // The name of the Role that is able to edit this field.
 }
 
 type ResponseData struct {
@@ -530,6 +531,9 @@ func (m *Client) marshalMultipartEmbeddedRequestWithTemplate(
 				}
 
 				bites, err := json.Marshal(embRequest.CustomFields)
+				if err != nil {
+					return nil, nil, err
+				}
 
 				cfields.Write(bites)
 			case "file":
@@ -549,6 +553,14 @@ func (m *Client) marshalMultipartEmbeddedRequestWithTemplate(
 						return nil, nil, err
 					}
 					formField.Write([]byte(fileURL))
+				}
+			case "template_ids":
+				for i, template := range embRequest.TemplateIDs {
+					formField, err := w.CreateFormField(fmt.Sprintf("template_ids[%v]", i))
+					if err != nil {
+						return nil, nil, err
+					}
+					formField.Write([]byte(template))
 				}
 			}
 		case reflect.Bool:
